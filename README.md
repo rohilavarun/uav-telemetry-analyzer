@@ -1,21 +1,61 @@
-# UAV Telemetry Anomaly Detector 🚁
+UAV Telemetry Anomaly Detector 🚁
+1. Project Overview
 
-## Overview
-When building and testing drones or fixed-wing UAVs, flight controllers generate massive CSV files filled with raw telemetry data (voltage, pitch, altitude, wind resistance). Manually scanning these logs to find out why a drone became unstable is incredibly time-consuming. 
+The UAV Telemetry Anomaly Detector is an automated diagnostic tool designed to enhance flight safety for Unmanned Aerial Vehicles. By processing high-frequency sensor logs (CSV), the system identifies critical flight risks—such as battery failures, aerodynamic instability, and hazardous weather conditions—using Unsupervised Machine Learning.
 
-This project is a Python-based Machine Learning tool that automatically parses post-flight `telemetry.csv` logs, detects critical anomalies (like sudden voltage drops or dangerous pitch angles), and generates a human-readable post-flight debrief.
+This project was developed as a solution to the time-consuming process of manually auditing telemetry data during drone prototyping and competition testing (e.g., SAE Aero Design).
 
-## Tech Stack
-* **Language:** Python 3.9
-* **Data Handling:** `pandas`, `numpy`
-* **Machine Learning:** `scikit-learn` 
+2. Technical Stack
 
-## Setup & Installation
+Language: Python 3.9
 
-1. **Clone the repository:**
-   Ensure you have downloaded all files into a single directory.
+Data Handling: Pandas
 
-2. **Install the required dependencies:**
-   Open your terminal and run:
-   ```bash
-   pip3 install pandas scikit-learn numpy
+Machine Learning: Scikit-Learn (Isolation Forest Algorithm)
+
+Environment: macOS / Linux / Windows
+
+3. Key Features
+
+ML-Driven Detection: Uses the IsolationForest algorithm to detect outliers in flight data without needing pre-labeled "error" datasets.
+
+Multi-Dimensional Analysis: Monitors Altitude, Voltage, Pitch, and Wind speed simultaneously to find correlations (e.g., wind gusts causing pitch instability).
+
+Instant Post-Flight Debrief: Provides a human-readable summary of exactly when and why a flight reached unsafe parameters.
+
+4. Installation & Setup
+
+Step 1: Clone the Repository
+
+Bash
+git clone https://github.com/rohilavarun/uav-telemetry-analyzer.git
+cd uav-telemetry-analyzer
+Step 2: Install Dependencies
+
+Bash
+pip3 install pandas scikit-learn numpy
+Step 3: Prepare Data
+Place your telemetry log in the root folder named telemetry.csv. Ensure it contains the following columns:
+Time, Altitude_m, Voltage_V, Pitch_deg, Wind_ms
+
+5. Usage
+
+To run the analysis, execute the main script:
+
+Bash
+python3 analyzer.py
+Sample Output:
+
+Plaintext
+POST-FLIGHT ML DEBRIEF: ANOMALIES DETECTED
+CRITICAL WARNING: 2 anomalies detected!
+Timestamp: [00:05] -> Pitch: -25° | Wind: 22m/s
+6. Safety Thresholds
+
+The system flags data points based on both ML deviations and physical limits:
+
+Voltage: Alerts if battery drops below 14.0V.
+
+Pitch: Alerts if the drone tilts beyond ±20 degrees.
+
+Wind: Alerts if gusts exceed 15 m/s.
